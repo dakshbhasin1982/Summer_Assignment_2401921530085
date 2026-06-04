@@ -1,24 +1,35 @@
 #include <iostream>
 #include <vector>
-
 using namespace std;
 
-class Solution {
-public:
-    int maxSubArray(vector<int>& nums) {
-        int currentSum = 0;
-        int maxSum = nums[0];
+int maxSubArray(vector<int>& nums) {
+    int best = nums[0];
+    int running = nums[0];
 
-        for (int i = 0; i < nums.size(); i++) {
-            currentSum += nums[i];
+    for (int i = 1; i < nums.size(); i++) {
+        running = max(nums[i], running + nums[i]);
 
-            maxSum = max(maxSum, currentSum);
-
-            if (currentSum < 0) {
-                currentSum = 0;
-            }
+        if (running > best) {
+            best = running;
         }
-
-        return maxSum;
     }
-};
+
+    return best;
+}
+
+int main() {
+    int n;
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    vector<int> nums(n);
+
+    cout << "Enter array elements: ";
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+
+    cout << "Maximum Subarray Sum = " << maxSubArray(nums) << endl;
+
+    return 0;
+}
