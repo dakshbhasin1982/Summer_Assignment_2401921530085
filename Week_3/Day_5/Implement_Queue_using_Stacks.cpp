@@ -1,62 +1,69 @@
-#include <iostream>
+ #include <iostream>
 #include <stack>
 using namespace std;
 
 class MyQueue {
 private:
-    stack<int> incoming;
-    stack<int> outgoing;
+    stack<int> inputStack;
+    stack<int> outputStack;
 
-    void moveElements() {
-        while (!incoming.empty()) {
-            outgoing.push(incoming.top());
-            incoming.pop();
+    void transfer() {
+
+        if(outputStack.empty()) {
+
+            while(!inputStack.empty()) {
+                outputStack.push(inputStack.top());
+                inputStack.pop();
+            }
         }
     }
 
 public:
+
     void push(int x) {
-        incoming.push(x);
+        inputStack.push(x);
     }
 
     int pop() {
-        if (outgoing.empty()) {
-            moveElements();
-        }
 
-        int value = outgoing.top();
-        outgoing.pop();
+        transfer();
 
-        return value;
+        int front = outputStack.top();
+        outputStack.pop();
+
+        return front;
     }
 
     int peek() {
-        if (outgoing.empty()) {
-            moveElements();
-        }
 
-        return outgoing.top();
+        transfer();
+
+        return outputStack.top();
     }
 
     bool empty() {
-        return incoming.empty() && outgoing.empty();
+
+        return inputStack.empty() &&
+               outputStack.empty();
     }
 };
 
 int main() {
+
     MyQueue q;
 
     q.push(1);
     q.push(2);
 
-    cout << "Front Element: " << q.peek() << endl;
-    cout << "Removed Element: " << q.pop() << endl;
+    cout << "Front Element: "
+         << q.peek() << endl;
 
-    if (q.empty()) {
-        cout << "Queue is Empty" << endl;
-    } else {
-        cout << "Queue is Not Empty" << endl;
-    }
+    cout << "Removed: "
+         << q.pop() << endl;
+
+    cout << "Is Queue Empty? "
+         << (q.empty() ? "Yes" : "No")
+         << endl;
 
     return 0;
 }
